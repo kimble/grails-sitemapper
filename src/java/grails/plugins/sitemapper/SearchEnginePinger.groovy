@@ -1,12 +1,13 @@
 package grails.plugins.sitemapper
 
+import org.apache.http.client.*;
+import org.apache.http.params.*;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.params.HttpParams;
+
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -39,9 +40,10 @@ class SearchEnginePinger implements InitializingBean {
 	}
 	
 	private boolean pingSearchEngine(String engineName, String urlFormat, String sitemapUrl) {
-		log.debug "Pinging $engineName @ $urlFormat"
 		try {
 			String pingUrl = String.format(urlFormat, sitemapUrl)
+			log.info "Pinging $engineName @ $pingUrl"
+			
 			HttpGet httpGet = new HttpGet(pingUrl)
 			HttpResponse response = httpClient.execute(httpGet)
 			log.info "Pinged $engineName"
@@ -49,6 +51,10 @@ class SearchEnginePinger implements InitializingBean {
 		} catch (HttpResponseException hex) {
 			log.warn ("Unable to ping $engineName. Http response exception, "
 				+ "${hex.statusCode}, message: ${hex.message}", hex)
+		} catch (IOException ex) {
+			log.warn "Unable to ping $engineName, io-ex: " + ex.message, ex 
+		} catch (ClientProtocolException cex) {
+			log.warn "Unable to ping $engineName, client-protocol-ex: " + ex.message, ex
 		} catch (Exception ex) {
 			log.error "Unable to ping $engineName, ex: " + ex.message, ex
 		}
