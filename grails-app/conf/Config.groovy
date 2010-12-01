@@ -32,9 +32,16 @@ log4j = {
 environments {
 	development {
 		grails.serverURL = "http://localhost:8080/"
+		searchEnginePingUrls {
+			bing = 'http://www.bing.com/webmaster/ping.aspx?siteMap=%s'
+			google = 'http://www.google.com/webmasters/sitemaps/ping?sitemap=%s'
+		}
 	}
 	
 	test {
 		grails.serverURL = "http://localhost:8080/"
+		searchEnginePingUrls {
+		}
 	}
+	
 }

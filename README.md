@@ -8,6 +8,17 @@ About sitemaps
 
 Sitemaps allows search engines to quickly spot changes on your site without crawling the whole page. Note that search engines are obviously not compelled to index your sites faster if you add a sitemap, but chances are that a lot of them will. Have a look at [sitemaps.org](http://sitemaps.org) for more information about sitemaps. 
 
+Search engine ping
+------------------
+
+Add something like this to your `Config.groovy` file. The %s will be substituted with the location of your index sitemap. 
+
+    sitemapConsumers {
+        bing 'http://www.bing.com/webmaster/ping.aspx?siteMap=%s'
+        google 'http://www.google.com/webmasters/sitemaps/ping?sitemap=%s'
+    }
+
+
 Setup
 -----------
 
