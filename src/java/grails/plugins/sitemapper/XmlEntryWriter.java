@@ -1,9 +1,8 @@
 package grails.plugins.sitemapper;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
-
+import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 
 /**
@@ -13,7 +12,7 @@ import javax.servlet.ServletOutputStream;
  */
 final class XmlEntryWriter {
 	
-	private final SimpleDateFormat dateFormat;
+	private final SitemapDateUtils dateUtils;
 	private final ServletOutputStream out;
 	private final String serverUrl;
 	
@@ -31,7 +30,7 @@ final class XmlEntryWriter {
 	public final static String PRIORITY_TAG = "priority";
 	
 	public XmlEntryWriter(ServletOutputStream out, String serverUrl) {
-		this.dateFormat = new SimpleDateFormat(XmlSitemapWriter.DATE_FORMAT);
+		this.dateUtils = new SitemapDateUtils();
 		this.serverUrl = serverUrl;
 		this.out = out;
 	}
@@ -54,11 +53,12 @@ final class XmlEntryWriter {
 		}
 	}
 	
-	private void printLastModification(final Map<String, String> args) throws IOException {
+	private void printLastModification(final Map<String, ?> args) throws IOException {
 		if (!args.containsKey(LAST_MOD_KEY)) {
 			throw new SitemapperException("Missing '" + LAST_MOD_KEY + "'");
 		} else {
-			final String timestamp = dateFormat.format(args.get(LAST_MOD_KEY));
+			final Date lastUpdate = (Date) args.get(LAST_MOD_KEY);
+			final String timestamp = dateUtils.formatForSitemap(lastUpdate);
 			printTag(LAST_MOD_TAG, timestamp);
 		}
 	}

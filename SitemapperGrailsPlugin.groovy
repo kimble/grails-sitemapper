@@ -2,7 +2,7 @@ import grails.plugins.sitemapper.*
 
 class SitemapperGrailsPlugin {
 	
-    def version = "0.2"
+    def version = "0.3"
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]
     def pluginExcludes = [

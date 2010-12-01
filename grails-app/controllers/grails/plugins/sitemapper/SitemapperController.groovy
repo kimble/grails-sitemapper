@@ -10,7 +10,9 @@ class SitemapperController {
 	
 	XmlSitemapWriter sitemapWriter
 
+	// The index sitemap
     def index = {
+		response.contentType = "application/xml"
 		ServletOutputStream out = response.outputStream
 		writeIndexHead out
 		sitemapWriter.writeIndexEntries out
@@ -27,7 +29,9 @@ class SitemapperController {
 		out << '</sitemapindex>'
 	}
 	
+	// The actual sitemaps / urlsets
 	def source = {
+		response.contentType = "application/xml"
 		ServletOutputStream out = response.outputStream
 		writeSitemapHead out
 		sitemapWriter.writeSitemapEntries out, getSourceName(params.name)
