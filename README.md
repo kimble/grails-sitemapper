@@ -54,4 +54,7 @@ The plugin will on startup register all Spring beans implementing `grails.plugin
 Bugs / roadmap
 --------------
 
- * Implement support for search engine ping. 
+ 1. Implement support for search engine ping (in progress).
+ 
+ 2. Wrap lib/spock-httpd.jar in a supporting Grails plugin. 
+ 
