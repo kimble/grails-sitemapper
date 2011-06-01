@@ -63,6 +63,7 @@ public abstract class AbstractSitemapWriter {
         return className.substring(0, endIndex).toLowerCase();
     }
 
+    @Required
     public void setServerUrlResolver(SitemapServerUrlResolver serverUrlResolver) {
         this.serverUrlResolver = serverUrlResolver;
     }

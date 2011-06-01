@@ -1,6 +1,5 @@
 import grails.plugins.sitemapper.*
 import grails.plugins.sitemapper.artefact.SitemapperArtefactHandler
-import grails.plugins.sitemapper.artefact.SitemapperClass
 
 import org.apache.http.impl.client.DefaultHttpClient
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
@@ -30,15 +29,16 @@ class SitemapperGrailsPlugin {
 
     def doWithSpring = {
 		
-		application.sitemapperClasses.each { SitemapperClass sc ->
-			println "Registering sitemapper class " + sc.name + " as sitemapper / bean"
-			"${sc.name}Sitemapper"(sc.clazz) { bean ->
-				bean.autowire = "byName"
-			}
+		application.sitemapperClasses.each { mapperClass ->
+            println "Registering sitemapper class ${mapperClass.name} as sitemapper / bean"
+            "${mapperClass.name}Sitemapper"(mapperClass.clazz) { bean ->
+                bean.autowire = true
+            }
 		}
         
         sitemapServerUrlResolver(ConfigSitemapServerUrlResolver)
-		sitemapWriter(XmlSitemapWriter) { 
+		sitemapWriter(XmlSitemapWriter) { bean ->
+            bean.scope = "prototype"
 			serverUrlResolver = ref("sitemapServerUrlResolver")
 		}
 		
@@ -48,11 +48,25 @@ class SitemapperGrailsPlugin {
 			httpClient = new DefaultHttpClient()
 		}
     }
+    
+    def onChange = { event -> 
+        if (application.isArtefactOfType(SitemapperArtefactHandler.TYPE, event.source)) {
+            def mapperClass = application.addArtefact(SitemapperArtefactHandler.TYPE, event.source)
+            def beanDefinitions = beans {
+                "${mapperClass.name}Sitemapper"(mapperClass.clazz) { bean ->
+                    bean.autowire = true
+                }
+            }
+
+            beanDefinitions.registerBeans(event.ctx)
+            // Fix this so sitemapWriter won't have to be prototype scoped 
+            // event.ctx.sitemapWriter.sitemappers = event.ctx.getBeansOfType(Sitemapper) as Set
+        }
+    }
 
 	def doWithWebDescriptor = { xml -> }
     def doWithDynamicMethods = { ctx -> }
     def doWithApplicationContext = { applicationContext -> }
-    def onChange = { event -> }
     def onConfigChange = { event -> }
 	
 }
