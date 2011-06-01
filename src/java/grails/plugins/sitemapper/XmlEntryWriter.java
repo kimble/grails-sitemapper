@@ -10,7 +10,7 @@ import javax.servlet.ServletOutputStream;
  * entries as XML to output stream. 
  * @author Kim A. Betti
  */
-final class XmlEntryWriter {
+final class XmlEntryWriter implements EntryWriter {
 	
 	private final SitemapDateUtils dateUtils;
 	private final ServletOutputStream out;
@@ -35,6 +35,10 @@ final class XmlEntryWriter {
 		this.out = out;
 	}
 	
+	/* (non-Javadoc)
+	 * @see grails.plugins.sitemapper.EntryWriter#addEntry(java.util.Map)
+	 */
+	@Override
 	public void addEntry(final Map<String, String> args) throws IOException {
 		out.print(URL_OPEN);
 		printLocation(args);

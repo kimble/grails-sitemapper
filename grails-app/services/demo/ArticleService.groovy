@@ -1,12 +1,12 @@
 package demo
 
-import grails.plugins.sitemapper.SitemapSource;
+import grails.plugins.sitemapper.Sitemapper;
 
 /**
  * For testing / example only
  * @author Kim A. Betti
  */
-class ArticleService implements SitemapSource {
+class ArticleService implements Sitemapper {
 
     static transactional = false
 	

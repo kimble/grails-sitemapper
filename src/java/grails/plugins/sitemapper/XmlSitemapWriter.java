@@ -1,8 +1,5 @@
 package grails.plugins.sitemapper;
 
-import static groovy.lang.Closure.DELEGATE_ONLY;
-import groovy.lang.Closure;
-
 import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
@@ -20,9 +17,9 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
 	public void writeIndexEntries(ServletOutputStream out) throws IOException {
 		SitemapDateUtils dateUtils = new SitemapDateUtils();
 		String serverUrl = serverUrlResolver.getServerUrl();
-		for (SitemapSource source : this.sitemapSources) {
-			String mapperName = source.getSitemapName();
-			String lastMod = dateUtils.formatForSitemap(source.getPreviousUpdate());
+		for (String mapperName : sitemappers.keySet()) {
+			Sitemapper mapper = sitemappers.get(mapperName);
+			String lastMod = dateUtils.formatForSitemap(mapper.getPreviousUpdate());
 			
 			out.print(SITEMAP_OPEN);
 			out.print(String.format("<loc>%s/sitemap-%s.xml</loc>", serverUrl, mapperName));
@@ -32,14 +29,10 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
 	}
 
 	@Override
-	public void writeSitemapEntries(ServletOutputStream out, SitemapSource source) throws IOException {
+	public void writeSitemapEntries(ServletOutputStream out, Sitemapper mapper) throws IOException {
 		String serverUrl = serverUrlResolver.getServerUrl();
-		XmlEntryWriter entryWriter = new XmlEntryWriter(out, serverUrl);
-		
-		Closure mapper = source.getSitemapper();
-		mapper.setResolveStrategy(DELEGATE_ONLY);
-		mapper.setDelegate(entryWriter);
-		mapper.call();
+		EntryWriter entryWriter = new XmlEntryWriter(out, serverUrl);
+		mapper.withEntryWriter(entryWriter);
 	}
 	
 }

@@ -36,9 +36,9 @@ class SitemapperGrailsPlugin {
 				bean.autowire = "byName"
 			}
 		}
-		
+        
         sitemapServerUrlResolver(ConfigSitemapServerUrlResolver)
-		sitemapWriter(XmlSitemapWriter) {
+		sitemapWriter(XmlSitemapWriter) { 
 			serverUrlResolver = ref("sitemapServerUrlResolver")
 		}
 		

@@ -1,9 +1,20 @@
 package demo
 
-class ForumSitemapper {
+import grails.plugins.sitemapper.EntryWriter;
+import grails.plugins.sitemapper.Sitemapper;
+
+
+class ForumSitemapper implements Sitemapper {
+    
+    String name = "forum"
 	
-	public ForumSitemapper() {
-		println "CONSTRUCTED A FORUM SITEMAPPER"
+	Date getPreviousUpdate() {
+		new Date()
+	}
+	
+	@Override
+	public void withEntryWriter(EntryWriter entryWriter) {
+		
 	}
 	
 }
