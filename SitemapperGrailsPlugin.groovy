@@ -1,6 +1,9 @@
 import grails.plugins.sitemapper.*
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import grails.plugins.sitemapper.artefact.SitemapperArtefactHandler
+import grails.plugins.sitemapper.artefact.SitemapperClass
+
 import org.apache.http.impl.client.DefaultHttpClient
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class SitemapperGrailsPlugin {
 	
@@ -18,8 +21,22 @@ class SitemapperGrailsPlugin {
     def description = 'Autogeneration of sitemaps, see sitemaps.org for more information about sitemaps.'
     def documentation = "https://www.github.com/kimble/grails-sitemapper"
 
+	def artefacts = [ SitemapperArtefactHandler ]
+	
+	def watchedResources = [
+		"file:./grails-app/sitemapper/**/*Sitemapper.groovy",
+		"file:./plugins/*/grails-app/sitemapper/**/*Sitemapper.groovy"
+	]
 
     def doWithSpring = {
+		
+		application.sitemapperClasses.each { SitemapperClass sc ->
+			println "Registering sitemapper class " + sc.name + " as sitemapper / bean"
+			"${sc.name}Sitemapper"(sc.clazz) { bean ->
+				bean.autowire = "byName"
+			}
+		}
+		
         sitemapServerUrlResolver(ConfigSitemapServerUrlResolver)
 		sitemapWriter(XmlSitemapWriter) {
 			serverUrlResolver = ref("sitemapServerUrlResolver")

@@ -1,7 +1,10 @@
 package grails.plugins.sitemapper;
 
+import static groovy.lang.Closure.DELEGATE_ONLY;
 import groovy.lang.Closure;
+
 import java.io.IOException;
+
 import javax.servlet.ServletOutputStream;
 
 /**
@@ -34,7 +37,7 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
 		XmlEntryWriter entryWriter = new XmlEntryWriter(out, serverUrl);
 		
 		Closure mapper = source.getSitemapper();
-		mapper.setResolveStrategy(Closure.DELEGATE_ONLY);
+		mapper.setResolveStrategy(DELEGATE_ONLY);
 		mapper.setDelegate(entryWriter);
 		mapper.call();
 	}
