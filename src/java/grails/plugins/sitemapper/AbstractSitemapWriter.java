@@ -9,18 +9,10 @@ import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-/**
- * 
- * @author Kim A. Betti
- */
 public abstract class AbstractSitemapWriter {
-
-    private Logger log = LoggerFactory.getLogger(AbstractSitemapWriter.class);
 
     protected SitemapServerUrlResolver serverUrlResolver;
     protected Map<String, Sitemapper> sitemappers = new HashMap<String, Sitemapper>();
@@ -37,20 +29,18 @@ public abstract class AbstractSitemapWriter {
         Sitemapper mapper = sitemappers.get(mapperName);
         if (mapper == null) {
             throw new RuntimeException("Unable to find source with name " + name);
-        } else {
-            return mapper;
-        }
+        } 
+
+        return mapper;
     }
 
     public abstract void writeSitemapEntries(ServletOutputStream os, Sitemapper m) throws IOException;
 
     @Required @Autowired
     public void setSitemappers(Set<Sitemapper> newMappers) {
-        log.info("Setting {} sitemapper(s)", newMappers.size());
         this.sitemappers.clear();
         for (Sitemapper mapper : newMappers) {
             String mapperName = getMapperName(mapper.getClass());
-            log.info("Adding sitemapper {}", mapperName);
             this.sitemappers.put(mapperName, mapper);
         }
     }
@@ -64,7 +54,7 @@ public abstract class AbstractSitemapWriter {
     }
 
     @Required
-    public void setServerUrlResolver(SitemapServerUrlResolver serverUrlResolver) {
+    public void setSitemapServerUrlResolver(SitemapServerUrlResolver serverUrlResolver) {
         this.serverUrlResolver = serverUrlResolver;
     }
 

@@ -13,7 +13,7 @@ class ForumSitemapper implements Sitemapper {
     }
 	
 	Date getPreviousUpdate() {
-		new Date() 
+		new Date() + 50
 	}
 	
 	@Override
