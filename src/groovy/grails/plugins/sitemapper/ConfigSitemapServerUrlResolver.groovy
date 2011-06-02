@@ -1,11 +1,10 @@
 package grails.plugins.sitemapper
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.codehaus.groovy.grails.commons.ConfigurationHolder;
-import org.codehaus.groovy.grails.commons.GrailsApplication;
-import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware;
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.springframework.beans.factory.InitializingBean
 
 /**
  * Default sitemapServerUrl bean.
@@ -22,11 +21,11 @@ class ConfigSitemapServerUrlResolver implements SitemapServerUrlResolver, Initia
 	void afterPropertiesSet() {
         serverUrl = grailsApplication.config?.grails?.serverURL?.toString()
 		if (!serverUrl) {
-			log.error ("Unable to find server url, please set grails.serverURL in Config.groovy, "
+			throw new RuntimeException("Unable to find server url, please set grails.serverURL in Config.groovy, "
 				+ "or provided your own implementation of SitemapServerUrlResolver.")
-		} else {
-			setServerUrl(serverUrl)
-		}
+		} 
+
+        setServerUrl(serverUrl)
 	}
 	
 	public void setServerUrl(String serverUrl) {
@@ -35,7 +34,7 @@ class ConfigSitemapServerUrlResolver implements SitemapServerUrlResolver, Initia
 		}
 		
 		this.serverUrl = serverUrl;
-		log.info "Using " + serverUrl + " as server url"
+		log.info "Using ${serverUrl} as server url"
 	}
 	
 }
