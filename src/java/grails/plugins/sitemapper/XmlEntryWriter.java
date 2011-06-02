@@ -1,8 +1,8 @@
 package grails.plugins.sitemapper;
 
-import java.util.Date;
-import java.util.Map;
 import java.io.IOException;
+import java.util.Date;
+
 import javax.servlet.ServletOutputStream;
 
 /**
@@ -35,54 +35,42 @@ final class XmlEntryWriter implements EntryWriter {
 		this.out = out;
 	}
 	
-	/* (non-Javadoc)
-	 * @see grails.plugins.sitemapper.EntryWriter#addEntry(java.util.Map)
-	 */
 	@Override
-	public void addEntry(final Map<String, String> args) throws IOException {
-		out.print(URL_OPEN);
-		printLocation(args);
-		printLastModification(args);
-		printChangeFrequency(args);
-		printPriority(args);
-		out.print(URL_CLOSE);
+    public void addEntry(String location, Date modifiedAt) throws IOException {
+	    out.print(URL_OPEN);
+        printLocation(location);
+        printLastModification(modifiedAt);
+        out.print(URL_CLOSE);
+    }
+
+    @Override
+    public void addEntry(String location, Date modifiedAt, String changeFrequency, int priority) throws IOException {
+        out.print(URL_OPEN);
+        printLocation(location);
+        printLastModification(modifiedAt);
+        printChangeFrequency(changeFrequency);
+        printPriority(priority);
+        out.print(URL_CLOSE);
+    }
+    
+    private void printLocation(String locationUrl) throws IOException {
+        printTag(LOCATION_TAG, serverUrl + locationUrl);
+    }
+	
+	private void printLastModification(Date modifiedAt) throws IOException {
+        printTag(LAST_MOD_TAG, dateUtils.formatForSitemap(modifiedAt));
 	}
 	
-	private void printLocation(final Map<String, String> args) throws IOException {
-		if (!args.containsKey(LOCATION_KEY)) {
-			throw new SitemapperException("Missing '" + LOCATION_KEY + "'");
-		} else {
-			final String locationUrl = serverUrl + args.get(LOCATION_KEY); 
-			printTag(LOCATION_TAG, locationUrl);
-		}
+	private void printChangeFrequency(String changeFrequency) throws IOException {
+	    printTag(CHANGE_FREQ_TAG, changeFrequency);
 	}
-	
-	private void printLastModification(final Map<String, ?> args) throws IOException {
-		if (!args.containsKey(LAST_MOD_KEY)) {
-			throw new SitemapperException("Missing '" + LAST_MOD_KEY + "'");
-		} else {
-			final Date lastUpdate = (Date) args.get(LAST_MOD_KEY);
-			final String timestamp = dateUtils.formatForSitemap(lastUpdate);
-			printTag(LAST_MOD_TAG, timestamp);
-		}
-	}
-	
-	private void printChangeFrequency(final Map<String, String> args) throws IOException {
-		if (args.containsKey(CHANGE_FREQ_KEY)) {
-			printTag(CHANGE_FREQ_TAG, args.get(CHANGE_FREQ_KEY));
-		}
-	}
-	
-	private void printPriority(final Map<String, ?> args) throws IOException {
-		if (args.containsKey(PRIORITY_KEY)) {
-			final Object priority = args.get(PRIORITY_KEY);
-			printTag(PRIORITY_TAG, priority.toString());
-		}
+
+	private void printPriority(int priority) throws IOException {
+	    printTag(PRIORITY_TAG, priority + "");
 	}
 	
 	private void printTag(final String tagName, final String value) throws IOException {
-		final String markup = String.format("<%s>%s</%1$s>", tagName, value);
-		out.print(markup);
+		out.print(String.format("<%s>%s</%1$s>", tagName, value));
 	}
 	
 }

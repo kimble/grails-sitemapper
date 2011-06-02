@@ -1,11 +1,12 @@
 package grails.plugins.sitemapper;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.Date;
 
-interface EntryWriter {
+public interface EntryWriter {
 
-	public abstract void addEntry(final Map<String, String> args)
-			throws IOException;
-
+	void addEntry(String location, Date modifiedAt) throws IOException;
+	
+	void addEntry(String location, Date modifiedAt, String changeFrequency, int priority) throws IOException;
+	
 }

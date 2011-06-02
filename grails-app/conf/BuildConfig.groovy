@@ -27,5 +27,6 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         compile 'org.apache.httpcomponents:httpclient:4.0.3'
+        test "org.objenesis:objenesis:1.2", "cglib:cglib-nodep:2.2"
     }
 }

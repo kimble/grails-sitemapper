@@ -4,7 +4,7 @@ import kim.spock.httpmock.*
 import grails.plugin.spock.IntegrationSpec
 
 @WithHttpServer(port=23456)
-class SearchEnginePingerSpec extends IntegrationSpec {
+class SearchEnginePingerIntegrationSpec extends IntegrationSpec {
 
 	SearchEnginePinger searchEnginePinger
 	
