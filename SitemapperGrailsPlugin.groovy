@@ -1,4 +1,5 @@
 import grails.plugins.sitemapper.*
+import grails.plugins.sitemapper.impl.*
 import grails.plugins.sitemapper.artefact.SitemapperArtefactHandler
 
 import org.apache.http.impl.client.DefaultHttpClient

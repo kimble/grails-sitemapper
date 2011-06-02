@@ -1,14 +1,13 @@
-package grails.plugins.sitemapper
+package grails.plugins.sitemapper.impl
 
-import org.apache.http.client.*;
-import org.apache.http.params.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import grails.plugins.sitemapper.SitemapServerUrlResolver
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.commons.logging.LogFactory
+import org.apache.http.HttpResponse
+import org.apache.http.client.*
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.params.*
+import org.springframework.beans.factory.InitializingBean
 
 /**
  * 

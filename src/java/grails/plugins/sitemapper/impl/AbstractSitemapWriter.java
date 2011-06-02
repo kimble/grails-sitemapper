@@ -1,6 +1,9 @@
-package grails.plugins.sitemapper;
+package grails.plugins.sitemapper.impl;
 
 import static grails.plugins.sitemapper.artefact.SitemapperArtefactHandler.SUFFIX;
+
+import grails.plugins.sitemapper.SitemapServerUrlResolver;
+import grails.plugins.sitemapper.Sitemapper;
 
 import java.io.IOException;
 import java.util.HashMap;

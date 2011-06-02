@@ -1,5 +1,7 @@
 package grails.plugins.sitemapper
 
+import grails.plugins.sitemapper.impl.XmlSitemapWriter;
+
 import javax.servlet.ServletOutputStream;
 
 /**

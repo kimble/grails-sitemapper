@@ -1,4 +1,7 @@
-package grails.plugins.sitemapper;
+package grails.plugins.sitemapper.impl;
+
+import grails.plugins.sitemapper.EntryWriter;
+import grails.plugins.sitemapper.Sitemapper;
 
 import java.io.IOException;
 import javax.servlet.ServletOutputStream;

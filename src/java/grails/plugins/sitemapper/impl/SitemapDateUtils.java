@@ -1,4 +1,4 @@
-package grails.plugins.sitemapper;
+package grails.plugins.sitemapper.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
