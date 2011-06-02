@@ -1,6 +1,6 @@
 package grails.plugins.sitemapper;
 
-import grails.plugins.sitemapper.artefact.SitemapperArtefactHandler;
+import static grails.plugins.sitemapper.artefact.SitemapperArtefactHandler.SUFFIX;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.util.Assert;
 
 public abstract class AbstractSitemapWriter {
 
@@ -47,9 +48,8 @@ public abstract class AbstractSitemapWriter {
     
     protected String getMapperName(Class<? extends Sitemapper> sitemapperClass) {
         String className = sitemapperClass.getSimpleName();
-        assert className.endsWith(SitemapperArtefactHandler.SUFFIX);
-        
-        int endIndex = className.length() - SitemapperArtefactHandler.SUFFIX.length();
+        Assert.isTrue(className.endsWith(SUFFIX));
+        int endIndex = className.length() - SUFFIX.length();
         return className.substring(0, endIndex).toLowerCase();
     }
 

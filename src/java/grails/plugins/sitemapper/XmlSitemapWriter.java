@@ -1,13 +1,8 @@
 package grails.plugins.sitemapper;
 
 import java.io.IOException;
-
 import javax.servlet.ServletOutputStream;
 
-/**
- * 
- * @author Kim A. Betti
- */
 public class XmlSitemapWriter extends AbstractSitemapWriter {
 
 	private final static String SITEMAP_OPEN = "<sitemap>";
@@ -17,7 +12,6 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
 	public void writeIndexEntries(ServletOutputStream out) throws IOException {
 		SitemapDateUtils dateUtils = new SitemapDateUtils();
 		String serverUrl = serverUrlResolver.getServerUrl();
-		System.out.println("Writing index entries for mappers: " + sitemappers);
 		for (String mapperName : sitemappers.keySet()) {
 			Sitemapper mapper = sitemappers.get(mapperName);
 			String lastMod = dateUtils.formatForSitemap(mapper.getPreviousUpdate());

@@ -6,19 +6,12 @@ import grails.plugins.sitemapper.Sitemapper;
 
 class ForumSitemapper implements Sitemapper {
     
-    String name = "forum"
-    
-    public ForumSitemapper() {
-        println "Constructed forum sitemapper";
-    }
-	
-	Date getPreviousUpdate() {
-		new Date() + 50
-	}
-	
+    Date previousUpdate = new Date()
+    	
 	@Override
 	public void withEntryWriter(EntryWriter entryWriter) {
-		// ...
+        entryWriter.addEntry "/forum/entry/test", new Date() - 1
+        entryWriter.addEntry "/forum/entry/test-2", new Date(), "MONTHLY", 3
 	}
 	
 }
