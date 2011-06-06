@@ -1,9 +1,9 @@
 package grails.plugins.sitemapper;
 
+import javax.servlet.ServletOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
-import java.io.IOException;
-import javax.servlet.ServletOutputStream;
 
 /**
  * Responsible for printing sitemap 
@@ -28,11 +28,15 @@ final class XmlEntryWriter {
 	public final static String LAST_MOD_TAG = "lastmod";
 	public final static String CHANGE_FREQ_TAG = "changefreq";
 	public final static String PRIORITY_TAG = "priority";
+
+  public Integer pageNum = 0;
 	
-	public XmlEntryWriter(ServletOutputStream out, String serverUrl) {
+	public XmlEntryWriter(ServletOutputStream out, String serverUrl, Integer pageNum) {
 		this.dateUtils = new SitemapDateUtils();
 		this.serverUrl = serverUrl;
 		this.out = out;
+
+    this.pageNum = pageNum;
 	}
 	
 	public void addEntry(final Map<String, String> args) throws IOException {

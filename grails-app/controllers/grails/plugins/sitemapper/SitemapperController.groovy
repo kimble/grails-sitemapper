@@ -34,7 +34,7 @@ class SitemapperController {
 		response.contentType = "application/xml"
 		ServletOutputStream out = response.outputStream
 		writeSitemapHead out
-		sitemapWriter.writeSitemapEntries out, getSourceName(params.name)
+		sitemapWriter.writeSitemapEntries out, getSourceName(params.name), getPageNum(params.name)
 		writeSitemapTail out
 		out.flush()
 	}
@@ -46,9 +46,26 @@ class SitemapperController {
 		String name = input
 		if (name.indexOf('.') > 0)
 			name = name.substring(0, name.indexOf('.'))
+
+    if (name.indexOf('-') > 0)
+      name = name.substring(0, name.indexOf('-'))
 			
 		return name
 	}
+
+  private Integer getPageNum(String input) {
+		if (!input)
+			throw new Exception("Missing source name");
+
+		String name = input
+		if (name.indexOf('.') > 0)
+			name = name.substring(0, name.indexOf('.'))
+
+    if (name.indexOf('-') > 0)
+      name = name.substring(name.indexOf('-') + 1, name.size())
+
+		return Integer.parseInt(name)
+  }
 	
 	private void writeSitemapHead(ServletOutputStream out) {
 		out << '<?xml version="1.0" encoding="UTF-8"?>' << "\n"

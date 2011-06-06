@@ -1,14 +1,12 @@
 package grails.plugins.sitemapper;
 
 import groovy.lang.Closure;
-
-import java.io.IOException;
-import java.util.Date;
-
-import javax.servlet.ServletOutputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletOutputStream;
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * 
@@ -30,10 +28,24 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
             Date modifiedAt = source.getPreviousUpdate();
             
             if (modifiedAt != null) {
-                out.print(SITEMAP_OPEN);
-                out.print(String.format("<loc>%s/sitemap-%s.xml</loc>", serverUrl, mapperName));
-                out.print(String.format("<lastmod>%s</lastmod>", dateUtils.formatForSitemap(modifiedAt)));
-                out.print(SITEMAP_CLOSE);
+                if (source instanceof PaginationSitemapSource) {
+                  PaginationSitemapSource paginationSource = (PaginationSitemapSource) source;
+
+                  int count = (int) Math.ceil((double)paginationSource.getTotalCount()
+                      / paginationSource.getPerPageCount());
+
+                  for (int i = 0 ; i < count; i ++) {
+                    out.print(SITEMAP_OPEN);
+                    out.print(String.format("<loc>%s/sitemap-%s.xml</loc>", serverUrl, mapperName + "-" + i));
+                    out.print(String.format("<lastmod>%s</lastmod>", dateUtils.formatForSitemap(modifiedAt)));
+                    out.print(SITEMAP_CLOSE);
+                  }
+                } else {
+                  out.print(SITEMAP_OPEN);
+                  out.print(String.format("<loc>%s/sitemap-%s.xml</loc>", serverUrl, mapperName));
+                  out.print(String.format("<lastmod>%s</lastmod>", dateUtils.formatForSitemap(modifiedAt)));
+                  out.print(SITEMAP_CLOSE);
+                }
             } else {
                 log.error("{} did not provied a recent modification date - not written to sitemap", mapperName);
             }
@@ -41,9 +53,10 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
     }
 
     @Override
-    public void writeSitemapEntries(ServletOutputStream out, SitemapSource source) throws IOException {
+    public void writeSitemapEntries(ServletOutputStream out, SitemapSource source, Integer pageNum)
+        throws IOException {
         String serverUrl = serverUrlResolver.getServerUrl();
-        XmlEntryWriter entryWriter = new XmlEntryWriter(out, serverUrl);
+        XmlEntryWriter entryWriter = new XmlEntryWriter(out, serverUrl, pageNum);
 
         Closure mapper = source.getSitemapper();
         mapper.setResolveStrategy(Closure.DELEGATE_ONLY);

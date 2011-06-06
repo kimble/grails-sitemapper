@@ -1,17 +1,16 @@
 package grails.plugins.sitemapper;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletOutputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import javax.servlet.ServletOutputStream;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 
@@ -24,7 +23,6 @@ public abstract class AbstractSitemapWriter implements ApplicationContextAware {
 	protected SitemapServerUrlResolver serverUrlResolver;
 	protected Set<SitemapSource> sitemapSources = new HashSet<SitemapSource>();
 
-	@Override
 	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
 		Map<String, SitemapSource> sitemapBeanSources = ctx.getBeansOfType(SitemapSource.class);
 		for (String beanName : sitemapBeanSources.keySet()) {
@@ -34,11 +32,15 @@ public abstract class AbstractSitemapWriter implements ApplicationContextAware {
 	}
 	
 	public abstract void writeIndexEntries(ServletOutputStream outputStream) throws IOException;
-	
-	public void writeSitemapEntries(ServletOutputStream outputStream, String sourceName) throws IOException {
+
+  public void writeSitemapEntries(ServletOutputStream outputStream, String sourceName) throws IOException {
+    writeSitemapEntries(outputStream, sourceName, 0);
+  }
+
+	public void writeSitemapEntries(ServletOutputStream outputStream, String sourceName, Integer pageNum) throws IOException {
 		for (SitemapSource source : sitemapSources) {
 			if (source.getSitemapName().equals(sourceName)) {
-				writeSitemapEntries(outputStream, source);
+				writeSitemapEntries(outputStream, source, pageNum);
 				return;
 			}
 		}
@@ -46,7 +48,7 @@ public abstract class AbstractSitemapWriter implements ApplicationContextAware {
 		throw new RuntimeException("Unable to find source with name " + sourceName);
 	}
 	
-	public abstract void writeSitemapEntries(ServletOutputStream outputStream, SitemapSource source) throws IOException;
+	public abstract void writeSitemapEntries(ServletOutputStream outputStream, SitemapSource source, Integer pageNum) throws IOException;
 	
 	public void setServerUrlResolver(SitemapServerUrlResolver serverUrlResolver) {
 		this.serverUrlResolver = serverUrlResolver;
