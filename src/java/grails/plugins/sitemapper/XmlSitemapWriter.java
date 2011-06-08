@@ -59,7 +59,7 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
         XmlEntryWriter entryWriter = new XmlEntryWriter(out, serverUrl, pageNum);
 
         Closure mapper = source.getSitemapper();
-        mapper.setResolveStrategy(Closure.DELEGATE_ONLY);
+        mapper.setResolveStrategy(Closure.DELEGATE_FIRST);
         mapper.setDelegate(entryWriter);
         mapper.call();
     }
