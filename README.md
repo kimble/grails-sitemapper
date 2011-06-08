@@ -11,13 +11,14 @@ Sitemaps allows search engines to quickly spot changes on your site without craw
 Search engine ping
 ------------------
 
-Add something like this to your `Config.groovy` file. The %s will be substituted with the location of your index sitemap. 
+Add something like this to your `Config.groovy` file. The %s will be substituted with sitemap uri. 
 
     sitemapConsumers {
         bing 'http://www.bing.com/webmaster/ping.aspx?siteMap=%s'
         google 'http://www.google.com/webmasters/sitemaps/ping?sitemap=%s'
     }
 
+Important! This has not yet been fully implemented. 
 
 Setup
 -----------
@@ -44,4 +45,5 @@ Add your sitemapper artefacts as `grails-app/sitemapper/your/package/mapperNameS
 Bugs / roadmap
 --------------
 
- 1. Implement support for search engine ping (in progress).
+ 1. Implement support for search engine ping - in (slow) progress.
+
