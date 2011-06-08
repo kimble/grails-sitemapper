@@ -22,39 +22,26 @@ Add something like this to your `Config.groovy` file. The %s will be substituted
 Setup
 -----------
 
-The plugin will on startup register all Spring beans implementing `grails.plugins.sitemapper.SitemapSource`. These Spring beans will be invoked upon sitemap generation.
+Add your sitemapper artefacts as `grails-app/sitemapper/your/package/mapperNameSitemapper.groovy`. Each class has to implement the `grails.plugins.sitemapper.Sitemapper` interface. The `withEntryWriter` method will be invoked each time the sitemap is requested.
 
-    class ArticleSitemapSource implements SitemapSource {
+    import grails.plugins.sitemapper.Sitemapper
 
-        // Each SitemapSource will result in a 
-        // sitemap by the specified name
-        String sitemapName = "articles"
+    class ForumSitemapper implements Sitemapper {
         
-        // Will be used for lastmod in 
-        // the sitemap index.
-        Date previousUpdate = new Date()
-        
-        // Invoke addEntry from this method for
-        // each document you want to add to the sitemap.
-        // location and lastModification is mandatory, you
-        // can leave out changeFrequency and priority. 
-        Closure sitemapper = {
-            3.times { n ->
-                addEntry (
-                    location: '/test-' + n + '.html', 
-                    lastModification: new Date(),
-                    changeFrequency: 'monthly',
-                    priority: 0.5
-                )
-            }
+        @Override
+        public Date getPreviousUpdate() {
+            return new Date(); // .. 
         }
-
+        	
+    	@Override
+    	public void withEntryWriter(EntryWriter entryWriter) {
+            entryWriter.addEntry("/forum/entry/test", new Date() - 1)
+            entryWriter.addEntry("/forum/entry/test-2", new Date(), "MONTHLY", 3)
+    	}
+    	
     }
 
 Bugs / roadmap
 --------------
 
  1. Implement support for search engine ping (in progress).
- 
- 2. Wrap lib/spock-httpd.jar in a supporting Grails plugin. 
- 

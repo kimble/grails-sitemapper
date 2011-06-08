@@ -1,9 +1,9 @@
-package grails.plugins.sitemapper
+package grails.plugins.sitemapper.impl
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import grails.plugin.spock.UnitSpec
+import grails.plugins.sitemapper.SitemapServerUrlResolver
 
-import grails.plugin.spock.UnitSpec;
+import org.apache.http.client.HttpClient
 
 class SearchEnginePingerSpec extends UnitSpec {
 
