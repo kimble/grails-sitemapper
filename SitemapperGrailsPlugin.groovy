@@ -31,7 +31,7 @@ class SitemapperGrailsPlugin {
     def doWithSpring = {
 		
 		application.sitemapperClasses.each { mapperClass ->
-            println "Registering sitemapper class ${mapperClass.name} as sitemapper / bean"
+            log.debug "Registering sitemapper class ${mapperClass.name} as sitemapper / bean"
             "${mapperClass.name}Sitemapper"(mapperClass.clazz) { bean ->
                 bean.autowire = true
             }
