@@ -55,16 +55,19 @@ class SitemapperController {
 
   private Integer getPageNum(String input) {
 		if (!input)
-			throw new Exception("Missing source name");
+			throw new Exception("Missing source pageNum");
 
-		String name = input
-		if (name.indexOf('.') > 0)
-			name = name.substring(0, name.indexOf('.'))
+		String pageNum = input
+		if (pageNum.indexOf('.') > 0)
+			pageNum = pageNum.substring(0, pageNum.indexOf('.'))
 
-    if (name.indexOf('-') > 0)
-      name = name.substring(name.indexOf('-') + 1, name.size())
+    if (pageNum.indexOf('-') > 0) {
+      pageNum = pageNum.substring(pageNum.indexOf('-') + 1, pageNum.size())
 
-		return Integer.parseInt(name)
+      if (pageNum) {
+        return Integer.parseInt(pageNum)
+      }
+    }
   }
 	
 	private void writeSitemapHead(ServletOutputStream out) {
