@@ -25,20 +25,13 @@ class SitemapperController {
    */
   def index = {
     response.contentType = "application/xml"
+
     ServletOutputStream out = response.outputStream
-    writeIndexHead(out)
-    sitemapWriter.writeIndexEntries(out)
-    writeIndexTail(out)
-    out.flush()
-  }
+    PrintWriter writer = new PrintWriter(out)
 
-  private void writeIndexHead(OutputStream out) {
-    out << '<?xml version="1.0" encoding="UTF-8"?>' << "\n"
-    out << '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' << "\n"
-  }
+    sitemapWriter.writeIndexEntries(writer)
 
-  private void writeIndexTail(OutputStream out) {
-    out << '</sitemapindex>'
+    writer.flush()
   }
 
   /**
@@ -49,11 +42,13 @@ class SitemapperController {
    */
   def source = {
     response.contentType = "application/xml"
+
     ServletOutputStream out = response.outputStream
-    writeSitemapHead(out)
-    sitemapWriter.writeSitemapEntries(out, parseName(params.name), parseNumber(params.name))
-    writeSitemapTail(out)
-    out.flush()
+    PrintWriter writer = new PrintWriter(out)
+
+    sitemapWriter.writeSitemapEntries(writer, parseName(params.name), parseNumber(params.name))
+
+    writer.flush()
   }
 
   private String parseName(String mapperName) {
@@ -79,15 +74,6 @@ class SitemapperController {
     }
 
     return 0;
-  }
-
-  private void writeSitemapHead(OutputStream out) {
-    out << """<?xml version="1.0" encoding="UTF-8"?>\n"""
-    out << """<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n"""
-  }
-
-  private void writeSitemapTail(OutputStream out) {
-    out << '</urlset>'
   }
 
 }

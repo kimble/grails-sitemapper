@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.Assert;
 
-import javax.servlet.ServletOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,17 +19,22 @@ public abstract class AbstractSitemapWriter {
   protected SitemapServerUrlResolver serverUrlResolver;
   protected Map<String, Sitemapper> sitemappers = new HashMap<String, Sitemapper>();
 
-  public abstract void writeIndexEntries(ServletOutputStream outputStream) throws IOException;
+  public abstract void writeIndexEntries(PrintWriter writer) throws IOException;
 
-  public void writeSitemapEntries(ServletOutputStream outputStream, String sourceName, Integer pageNumber)
+  public void writeSitemapEntries(PrintWriter writer, String sourceName, Integer pageNumber)
       throws IOException {
     Sitemapper mapper = getMapperByName(sourceName);
 
-    if (mapper instanceof PaginationSitemapper) {
-      ((PaginationSitemapper) mapper).setPageNumber(pageNumber);
+    writeSitemapEntries(writer, mapper, pageNumber);
+  }
+
+  public void writeSitemapEntries(PrintWriter writer, Sitemapper sitemapper, Integer pageNumber)
+      throws IOException {
+    if (sitemapper instanceof PaginationSitemapper) {
+      ((PaginationSitemapper) sitemapper).setPageNumber(pageNumber);
     }
 
-    writeSitemapEntries(outputStream, mapper);
+    writeSitemapEntries(writer, sitemapper);
   }
 
   protected Sitemapper getMapperByName(String name) {
@@ -42,7 +47,11 @@ public abstract class AbstractSitemapWriter {
     return mapper;
   }
 
-  public abstract void writeSitemapEntries(ServletOutputStream os, Sitemapper m) throws IOException;
+  public abstract void writeSitemapEntries(PrintWriter writer, Sitemapper m) throws IOException;
+
+  public Map<String, Sitemapper> getSitemappers() {
+    return sitemappers;
+  }
 
   @Required
   @Autowired

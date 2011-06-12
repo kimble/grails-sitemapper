@@ -2,8 +2,8 @@ package grails.plugins.sitemapper.impl;
 
 import grails.plugins.sitemapper.EntryWriter;
 
-import javax.servlet.ServletOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
 /**
@@ -15,7 +15,7 @@ import java.util.Date;
 final class XmlEntryWriter implements EntryWriter {
 
   private final SitemapDateUtils dateUtils;
-  private final ServletOutputStream out;
+  private final PrintWriter writer;
   private final String serverUrl;
 
   private final static String URL_OPEN = "<url>";
@@ -26,28 +26,28 @@ final class XmlEntryWriter implements EntryWriter {
   public final static String CHANGE_FREQ_TAG = "changefreq";
   public final static String PRIORITY_TAG = "priority";
 
-  public XmlEntryWriter(ServletOutputStream out, String serverUrl) {
+  public XmlEntryWriter(PrintWriter writer, String serverUrl) {
     this.dateUtils = new SitemapDateUtils();
     this.serverUrl = serverUrl;
-    this.out = out;
+    this.writer = writer;
   }
 
   @Override
   public void addEntry(String location, Date modifiedAt) throws IOException {
-    out.print(URL_OPEN);
+    writer.print(URL_OPEN);
     printLocation(location);
     printLastModification(modifiedAt);
-    out.print(URL_CLOSE);
+    writer.print(URL_CLOSE);
   }
 
   @Override
   public void addEntry(String location, Date modifiedAt, String changeFrequency, int priority) throws IOException {
-    out.print(URL_OPEN);
+    writer.print(URL_OPEN);
     printLocation(location);
     printLastModification(modifiedAt);
     printChangeFrequency(changeFrequency);
     printPriority(priority);
-    out.print(URL_CLOSE);
+    writer.print(URL_CLOSE);
   }
 
   private void printLocation(String locationUrl) throws IOException {
@@ -67,7 +67,7 @@ final class XmlEntryWriter implements EntryWriter {
   }
 
   private void printTag(final String tagName, final String value) throws IOException {
-    out.print(String.format("<%s>%s</%1$s>", tagName, value));
+    writer.print(String.format("<%s>%s</%1$s>", tagName, value));
   }
 
 }

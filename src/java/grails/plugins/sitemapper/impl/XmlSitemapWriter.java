@@ -3,8 +3,8 @@ package grails.plugins.sitemapper.impl;
 import grails.plugins.sitemapper.EntryWriter;
 import grails.plugins.sitemapper.Sitemapper;
 
-import javax.servlet.ServletOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class XmlSitemapWriter extends AbstractSitemapWriter {
 
@@ -12,7 +12,9 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
   private final static String SITEMAP_CLOSE = "</sitemap>\n";
 
   @Override
-  public void writeIndexEntries(ServletOutputStream out) throws IOException {
+  public void writeIndexEntries(PrintWriter writer) throws IOException {
+    writeIndexHead(writer);
+
     SitemapDateUtils dateUtils = new SitemapDateUtils();
     String serverUrl = serverUrlResolver.getServerUrl();
     for (String mapperName : sitemappers.keySet()) {
@@ -25,27 +27,61 @@ public class XmlSitemapWriter extends AbstractSitemapWriter {
         int count = paginationMapper.getPagesCount();
 
         for (int i = 0; i < count; i++) {
-          writeIndexExtry(out, serverUrl, mapperName + "-" + i, lastMod);
+          writeIndexExtry(writer, serverUrl, mapperName + "-" + i, lastMod);
         }
       } else {
-        writeIndexExtry(out, serverUrl, mapperName, lastMod);
+        writeIndexExtry(writer, serverUrl, mapperName, lastMod);
       }
     }
+
+    writeIndexTail(writer);
   }
 
   @Override
-  public void writeSitemapEntries(ServletOutputStream out, Sitemapper mapper) throws IOException {
+  public void writeSitemapEntries(PrintWriter writer, Sitemapper sitemapper, Integer pageNumber)
+      throws IOException {
+    writeSitemapHead(writer);
+
+    super.writeSitemapEntries(writer, sitemapper, pageNumber);
+
+    writeSitemapTail(writer);
+  }
+
+  @Override
+  public void writeSitemapEntries(PrintWriter writer, Sitemapper mapper) throws IOException {
     String serverUrl = serverUrlResolver.getServerUrl();
-    EntryWriter entryWriter = new XmlEntryWriter(out, serverUrl);
+    EntryWriter entryWriter = new XmlEntryWriter(writer, serverUrl);
     mapper.withEntryWriter(entryWriter);
   }
 
-  private void writeIndexExtry(ServletOutputStream out, String serverUrl, String mapperName, String lastMod)
+  private void writeIndexHead(PrintWriter writer) {
+    writer.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    writer.print("\n");
+    writer.print("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+    writer.print("\n");
+  }
+
+  private void writeIndexTail(PrintWriter writer) {
+    writer.print("</sitemapindex>");
+  }
+
+  private void writeIndexExtry(PrintWriter writer, String serverUrl, String mapperName, String lastMod)
       throws IOException {
-    out.print(SITEMAP_OPEN);
-    out.print(String.format("<loc>%s/sitemap-%s.xml</loc>", serverUrl, mapperName));
-    out.print(String.format("<lastmod>%s</lastmod>", lastMod));
-    out.print(SITEMAP_CLOSE);
+    writer.print(SITEMAP_OPEN);
+    writer.print(String.format("<loc>%s/sitemap-%s.xml</loc>", serverUrl, mapperName));
+    writer.print(String.format("<lastmod>%s</lastmod>", lastMod));
+    writer.print(SITEMAP_CLOSE);
+  }
+
+  private void writeSitemapHead(PrintWriter writer) {
+    writer.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    writer.print("\n");
+    writer.print("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+    writer.print("\n");
+  }
+
+  private void writeSitemapTail(PrintWriter writer) {
+    writer.print("</urlset>");
   }
 
 }
