@@ -69,7 +69,7 @@ class SitemapperController {
     if (mapperName.contains('-')) {
       int dashIndex = mapperName.indexOf('-')
       int dotIndex = mapperName.indexOf('.')
-      String num = mapperName.substring(dashIndex + 1, dotIndex)
+      String num = mapperName.substring(dashIndex + 1, dotIndex > -1 ? dotIndex : mapperName.size())
       return Integer.parseInt(num)
     }
 
