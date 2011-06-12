@@ -7,6 +7,6 @@ public interface EntryWriter {
 
   void addEntry(String location, Date modifiedAt) throws IOException;
 
-  void addEntry(String location, Date modifiedAt, String changeFrequency, int priority) throws IOException;
+  void addEntry(String location, Date modifiedAt, String changeFrequency, double priority) throws IOException;
 
 }

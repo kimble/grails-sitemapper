@@ -25,13 +25,13 @@ class ArticlesSitemapper extends PaginationSitemapper {
 
       case 1:
         2.times { n ->
-          entryWriter.addEntry "/articles/${n}", new Date(), "monthly", 3
+          entryWriter.addEntry "/articles/${n}", new Date(), "monthly", 0.5
         }
         break;
 
       case 2:
         3.times { n ->
-          entryWriter.addEntry "/articles/${n}", new Date(), "daily", 3
+          entryWriter.addEntry "/articles/${n}", new Date(), "daily", 0.6
         }
         break;
     }

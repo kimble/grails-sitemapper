@@ -41,7 +41,7 @@ final class XmlEntryWriter implements EntryWriter {
   }
 
   @Override
-  public void addEntry(String location, Date modifiedAt, String changeFrequency, int priority) throws IOException {
+  public void addEntry(String location, Date modifiedAt, String changeFrequency, double priority) throws IOException {
     writer.print(URL_OPEN);
     printLocation(location);
     printLastModification(modifiedAt);
@@ -62,7 +62,7 @@ final class XmlEntryWriter implements EntryWriter {
     printTag(CHANGE_FREQ_TAG, changeFrequency);
   }
 
-  private void printPriority(int priority) throws IOException {
+  private void printPriority(double priority) throws IOException {
     printTag(PRIORITY_TAG, priority + "");
   }
 
