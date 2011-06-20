@@ -1,28 +1,33 @@
 package grails.plugins.sitemapper
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
 
 /**
  * Default sitemapServerUrl bean.
  * Looks up server URL in application configuration (grails.serverURL). 
  * @author Kim A. Betti
  */
-class ConfigSitemapServerUrlResolver implements SitemapServerUrlResolver {
+class ConfigSitemapServerUrlResolver implements SitemapServerUrlResolver, GrailsApplicationAware {
 
-  private static final Log log = LogFactory.getLog(this)
+    GrailsApplication grailsApplication
 
-  public String getServerUrl() {
-    String serverUrl = ConfigurationHolder.config?.grails?.serverURL?.toString()
-    if (!serverUrl) {
-      log.error("Unable to find server url, please set grails.serverURL in Config.groovy, "
-          + "or provided your own implementation of SitemapServerUrlResolver.")
+    public String getServerUrl() {
+        String serverUrl = getServerUrlFromConfiguration()
+        if (serverUrl == null) {
+            throw new SitemapperException("Unable to find server url, please set grails.serverURL "
+                    + "in Config.groovy, or provided your own implementation of SitemapServerUrlResolver.")
+        }
+        
+        return removeTrailingSlash(serverUrl)
     }
-    if (serverUrl.endsWith("/")) {
-      return serverUrl.substring(0, serverUrl.size() - 1)
+    
+    protected String getServerUrlFromConfiguration() {
+        grailsApplication.config?.grails?.serverURL?.toString()
     }
-    serverUrl
-  }
-
+    
+    protected String removeTrailingSlash(String serverUrl) {
+        serverUrl.endsWith("/") ? serverUrl.substring(0, serverUrl.size() - 1) : serverUrl
+    }
+    
 }
