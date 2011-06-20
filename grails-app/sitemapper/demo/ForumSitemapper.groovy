@@ -11,7 +11,7 @@ class ForumSitemapper implements Sitemapper {
   @Override
   public void withEntryWriter(EntryWriter entryWriter) {
     entryWriter.addEntry "/forum/entry/test", new Date() - 1
-    entryWriter.addEntry "/forum/entry/test-2", new Date(), "MONTHLY", 0.7
+    entryWriter.addEntry "/forum/entry/test-2?a=1&b=2", new Date(), "MONTHLY", 0.7
   }
 
 }
