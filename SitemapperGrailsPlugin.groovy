@@ -7,7 +7,7 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class SitemapperGrailsPlugin {
 
-  def version = "0.7"
+  def version = "0.7.1"
   def grailsVersion = "1.3.0 > *"
   def dependsOn = [:]
   def pluginExcludes = [
